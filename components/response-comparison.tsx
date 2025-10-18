@@ -39,6 +39,8 @@ export function ResponseComparison({ results }: ResponseComparisonProps) {
               {result.params.seed && ` | Seed: ${result.params.seed}`}
               {result.params.max_tokens &&
                 ` | Max Tokens: ${result.params.max_tokens}`}
+              {result.responseTime && ` | Time: ${result.responseTime}ms`}
+              {result.finishReason && ` | Finish: ${result.finishReason}`}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -50,7 +52,7 @@ export function ResponseComparison({ results }: ResponseComparisonProps) {
 
               <Separator />
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <p className="text-xs text-muted-foreground">Coherence</p>
                   <p className="text-lg font-semibold">
@@ -67,6 +69,36 @@ export function ResponseComparison({ results }: ResponseComparisonProps) {
                   <p className="text-xs text-muted-foreground">Completeness</p>
                   <p className="text-lg font-semibold">
                     {result.metrics.completeness.toFixed(3)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Confidence</p>
+                  <p className="text-lg font-semibold">
+                    {result.metrics.confidence?.toFixed(3) ?? "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Entropy</p>
+                  <p className="text-lg font-semibold">
+                    {result.metrics.entropy?.toFixed(2) ?? "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Perplexity</p>
+                  <p className="text-lg font-semibold">
+                    {result.metrics.perplexity?.toFixed(2) ?? "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Repetition</p>
+                  <p className="text-lg font-semibold">
+                    {result.metrics.repetitionRatio?.toFixed(3) ?? "N/A"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Vocab Rich</p>
+                  <p className="text-lg font-semibold">
+                    {result.metrics.vocabularyRichness?.toFixed(3) ?? "N/A"}
                   </p>
                 </div>
               </div>

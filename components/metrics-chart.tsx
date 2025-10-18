@@ -30,6 +30,18 @@ export function MetricsChart({ results }: MetricsChartProps) {
     Coherence: result.metrics.coherence,
     "Length Score": result.metrics.lengthScore,
     Completeness: result.metrics.completeness,
+    Confidence: result.metrics.confidence ?? 0,
+    "Vocab Richness": result.metrics.vocabularyRichness ?? 0,
+    // For display purposes, invert these so higher is better in chart
+    "Low Entropy": result.metrics.entropy
+      ? Math.max(0, 5 - result.metrics.entropy) / 5
+      : 0,
+    "Low Perplexity": result.metrics.perplexity
+      ? Math.max(0, Math.min(1, 20 / result.metrics.perplexity))
+      : 0,
+    "Low Repetition": result.metrics.repetitionRatio
+      ? 1 - result.metrics.repetitionRatio
+      : 0,
   }));
 
   return (
@@ -66,6 +78,10 @@ export function MetricsChart({ results }: MetricsChartProps) {
             <Bar dataKey="Coherence" fill="#8884d8" />
             <Bar dataKey="Length Score" fill="#82ca9d" />
             <Bar dataKey="Completeness" fill="#ffc658" />
+            <Bar dataKey="Confidence" fill="#ff8042" />
+            <Bar dataKey="Vocab Richness" fill="#a28dd8" />
+            <Bar dataKey="Low Entropy" fill="#6dd88d" />
+            <Bar dataKey="Low Repetition" fill="#d88682" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
