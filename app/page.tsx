@@ -4,15 +4,28 @@ import { useState } from "react";
 import { PromptForm } from "@/components/prompt-form";
 import { ResultsDashboard } from "@/components/results-dashboard";
 import { ExportActions } from "@/components/export-actions";
+import { TestPromptsSelector } from "@/components/test-prompts-selector";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PromptFormValues } from "@/lib/validation";
 import { ExperimentResult } from "@/types";
+import { TestPrompt } from "@/lib/test-prompts";
 import { AlertCircle, Sparkles } from "lucide-react";
 
 export default function Home() {
   const [results, setResults] = useState<ExperimentResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTestPrompt, setSelectedTestPrompt] =
+    useState<Partial<PromptFormValues> | null>(null);
+
+  const handleTestPromptSelect = (testPrompt: TestPrompt) => {
+    const formValues: Partial<PromptFormValues> = {
+      prompt: testPrompt.prompt,
+      numResponses: 3,
+      ...testPrompt.recommendedParams,
+    };
+    setSelectedTestPrompt(formValues);
+  };
 
   const handleSubmit = async (values: PromptFormValues) => {
     setIsLoading(true);
@@ -83,7 +96,13 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
-            <PromptForm onSubmit={handleSubmit} isLoading={isLoading} />
+            <TestPromptsSelector onSelectPrompt={handleTestPromptSelect} />
+
+            <PromptForm
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              initialValues={selectedTestPrompt || undefined}
+            />
 
             {error && (
               <Alert variant="destructive">

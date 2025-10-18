@@ -16,19 +16,26 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { promptFormSchema, PromptFormValues } from "@/lib/validation";
+import { useEffect } from "react";
 
 interface PromptFormProps {
   onSubmit: (values: PromptFormValues) => void;
   isLoading?: boolean;
+  initialValues?: Partial<PromptFormValues>;
 }
 
-export function PromptForm({ onSubmit, isLoading = false }: PromptFormProps) {
+export function PromptForm({
+  onSubmit,
+  isLoading = false,
+  initialValues,
+}: PromptFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     setValue,
+    reset,
   } = useForm<PromptFormValues>({
     resolver: zodResolver(promptFormSchema),
     defaultValues: {
@@ -51,6 +58,17 @@ export function PromptForm({ onSubmit, isLoading = false }: PromptFormProps) {
       enableSeed: false,
     },
   });
+
+  // Update form when initialValues change
+  useEffect(() => {
+    if (initialValues) {
+      Object.entries(initialValues).forEach(([key, value]) => {
+        if (value !== undefined) {
+          setValue(key as keyof PromptFormValues, value);
+        }
+      });
+    }
+  }, [initialValues, setValue]);
 
   const temperatureMin = watch("temperatureMin");
   const temperatureMax = watch("temperatureMax");
