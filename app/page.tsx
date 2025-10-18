@@ -6,11 +6,14 @@ import { ExportActions } from "@/components/export-actions";
 import { TestPromptsModal } from "@/components/test-prompts-modal";
 import { ResultsModal } from "@/components/results-modal";
 import { SavedRunsModal } from "@/components/saved-runs-modal";
+import { ProtectedContent } from "@/components/protected-content";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { PromptFormValues } from "@/lib/validation";
 import { ExperimentResult, ExperimentRun } from "@/types";
 import { TestPrompt } from "@/lib/test-prompts";
-import { AlertCircle, Sparkles } from "lucide-react";
+import { AlertCircle, Sparkles, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 export default function Home() {
   const [results, setResults] = useState<ExperimentResult[]>([]);
@@ -18,6 +21,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [selectedTestPrompt, setSelectedTestPrompt] =
     useState<Partial<PromptFormValues> | null>(null);
+  const { logout } = useAuth();
 
   const handleTestPromptSelect = (testPrompt: TestPrompt) => {
     const formValues: Partial<PromptFormValues> = {
@@ -43,10 +47,12 @@ export default function Home() {
     setIsLoading(true);
     setError(null);
     try {
+      const password = sessionStorage.getItem("app_password");
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-app-password": password || "",
         },
         body: JSON.stringify({
           prompt: values.prompt,
@@ -91,48 +97,50 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Sparkles className="h-8 w-8 text-primary" />
-              <h1 className="text-4xl font-bold">
-                AI Response Quality Analyzer
-              </h1>
-            </div>
-            <p className="text-muted-foreground mb-6">
-              Compare LLM responses with different parameters and analyze
-              quality metrics
-            </p>
+    <ProtectedContent>
+      <div className="min-h-screen bg-background">
+        <main className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Sparkles className="h-8 w-8 text-primary" />
+                <h1 className="text-4xl font-bold">
+                  AI Response Quality Analyzer
+                </h1>
+              </div>
+              <p className="text-muted-foreground mb-6">
+                Compare LLM responses with different parameters and analyze
+                quality metrics
+              </p>
 
-            {/* Modal Trigger Buttons */}
-            <div className="flex items-center justify-center gap-4 mb-8">
-              <TestPromptsModal onSelectPrompt={handleTestPromptSelect} />
-              <ResultsModal results={results} />
-              <SavedRunsModal onLoadRun={handleLoadRun} />
+              {/* Modal Trigger Buttons */}
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <TestPromptsModal onSelectPrompt={handleTestPromptSelect} />
+                <ResultsModal results={results} />
+                <SavedRunsModal onLoadRun={handleLoadRun} />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <PromptForm
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
+                initialValues={selectedTestPrompt || undefined}
+              />
+
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Error</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <ExportActions results={results} />
             </div>
           </div>
-
-          <div className="space-y-6">
-            <PromptForm
-              onSubmit={handleSubmit}
-              isLoading={isLoading}
-              initialValues={selectedTestPrompt || undefined}
-            />
-
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <ExportActions results={results} />
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </ProtectedContent>
   );
 }

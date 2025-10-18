@@ -5,6 +5,14 @@ import { GenerateRequest, ExperimentResult } from "@/types";
 
 export async function POST(request: NextRequest) {
   try {
+    // Verify password
+    const password = request.headers.get("x-app-password");
+    const appPassword = process.env.APP_PASSWORD;
+
+    if (!password || password !== appPassword) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body: GenerateRequest = await request.json();
     const {
       prompt,
