@@ -14,8 +14,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Response Quality Analyzer",
-  description: "Analyze and compare LLM responses with different parameters",
+  title: "AI Response Quality Analyzer | GenAI Labs",
+  description:
+    "Analyze and compare LLM responses with different parameters. Test temperature, top_p settings, and evaluate quality metrics like coherence, length, and completeness.",
+  keywords: ["AI", "LLM", "OpenAI", "Response Quality", "Analysis", "GPT"],
+  authors: [{ name: "GenAI Labs" }],
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
