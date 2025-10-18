@@ -50,6 +50,10 @@ export function ResultsTable({ results }: ResultsTableProps) {
               <TableRow>
                 <TableHead>Temperature</TableHead>
                 <TableHead>Top P</TableHead>
+                <TableHead>Freq Penalty</TableHead>
+                <TableHead>Pres Penalty</TableHead>
+                <TableHead>Seed</TableHead>
+                <TableHead>Max Tokens</TableHead>
                 <TableHead>
                   <TooltipProvider>
                     <Tooltip>
@@ -101,8 +105,20 @@ export function ResultsTable({ results }: ResultsTableProps) {
             <TableBody>
               {results.map((result) => (
                 <TableRow key={result.id}>
-                  <TableCell>{result.params.temperature.toFixed(2)}</TableCell>
-                  <TableCell>{result.params.top_p.toFixed(2)}</TableCell>
+                  <TableCell>
+                    {result.params.temperature?.toFixed(2) ?? "N/A"}
+                  </TableCell>
+                  <TableCell>
+                    {result.params.top_p?.toFixed(2) ?? "N/A"}
+                  </TableCell>
+                  <TableCell>
+                    {result.params.frequency_penalty?.toFixed(2) ?? "N/A"}
+                  </TableCell>
+                  <TableCell>
+                    {result.params.presence_penalty?.toFixed(2) ?? "N/A"}
+                  </TableCell>
+                  <TableCell>{result.params.seed ?? "N/A"}</TableCell>
+                  <TableCell>{result.params.max_tokens ?? "N/A"}</TableCell>
                   <TableCell
                     className={
                       isBest(result.metrics.coherence, bestCoherence)

@@ -27,7 +27,22 @@ export default function Home() {
           prompt: values.prompt,
           temperatureRange: [values.temperatureMin, values.temperatureMax],
           topPRange: [values.topPMin, values.topPMax],
+          frequencyPenaltyRange: [
+            values.frequencyPenaltyMin,
+            values.frequencyPenaltyMax,
+          ],
+          presencePenaltyRange: [
+            values.presencePenaltyMin,
+            values.presencePenaltyMax,
+          ],
+          seed: values.seed,
+          maxTokens: values.maxTokens,
           numResponses: values.numResponses,
+          enableTemperature: values.enableTemperature,
+          enableTopP: values.enableTopP,
+          enableFrequencyPenalty: values.enableFrequencyPenalty,
+          enablePresencePenalty: values.enablePresencePenalty,
+          enableSeed: values.enableSeed,
         }),
       });
 

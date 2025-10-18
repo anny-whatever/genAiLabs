@@ -26,8 +26,19 @@ export function ResponseComparison({ results }: ResponseComparisonProps) {
           <CardHeader>
             <CardTitle>Response #{index + 1}</CardTitle>
             <CardDescription>
-              Temperature: {result.params.temperature.toFixed(2)} | Top P:{" "}
-              {result.params.top_p.toFixed(2)}
+              {result.params.temperature &&
+                `Temperature: ${result.params.temperature.toFixed(2)}`}
+              {result.params.top_p &&
+                ` | Top P: ${result.params.top_p.toFixed(2)}`}
+              {result.params.frequency_penalty &&
+                ` | Freq Penalty: ${result.params.frequency_penalty.toFixed(
+                  2
+                )}`}
+              {result.params.presence_penalty &&
+                ` | Pres Penalty: ${result.params.presence_penalty.toFixed(2)}`}
+              {result.params.seed && ` | Seed: ${result.params.seed}`}
+              {result.params.max_tokens &&
+                ` | Max Tokens: ${result.params.max_tokens}`}
             </CardDescription>
           </CardHeader>
           <CardContent>

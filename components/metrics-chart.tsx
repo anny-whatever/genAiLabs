@@ -24,9 +24,9 @@ export function MetricsChart({ results }: MetricsChartProps) {
 
   const chartData = results.map((result, index) => ({
     name: `#${index + 1}`,
-    params: `T:${result.params.temperature.toFixed(
-      2
-    )} P:${result.params.top_p.toFixed(2)}`,
+    params: `T:${result.params.temperature?.toFixed(2) ?? "N/A"} P:${
+      result.params.top_p?.toFixed(2) ?? "N/A"
+    }`,
     Coherence: result.metrics.coherence,
     "Length Score": result.metrics.lengthScore,
     Completeness: result.metrics.completeness,
