@@ -162,7 +162,6 @@ export function ResultsTable({ results }: ResultsTableProps) {
                   </TooltipProvider>
                 </TableHead>
                 <TableHead>Time (ms)</TableHead>
-                <TableHead>Response Preview</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -243,9 +242,6 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     {result.metrics.vocabularyRichness?.toFixed(3) ?? "N/A"}
                   </TableCell>
                   <TableCell>{result.responseTime ?? "N/A"}</TableCell>
-                  <TableCell className="max-w-xs truncate">
-                    {result.response.slice(0, 100)}...
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
