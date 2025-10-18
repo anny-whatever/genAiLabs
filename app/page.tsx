@@ -118,6 +118,15 @@ export default function Home() {
                 <TestPromptsModal onSelectPrompt={handleTestPromptSelect} />
                 <ResultsModal results={results} />
                 <SavedRunsModal onLoadRun={handleLoadRun} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={logout}
+                  className="gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
               </div>
             </div>
 

@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Lock, AlertCircle } from "lucide-react";
+import { Lock, AlertCircle, Mail } from "lucide-react";
 
 export function LoginPage() {
   const [password, setPassword] = useState("");
@@ -89,6 +89,20 @@ export function LoginPage() {
               {isLoading ? "Verifying..." : "Enter"}
             </Button>
           </form>
+
+          <div className="mt-4 text-center">
+            <Button
+              variant="ghost"
+              className="gap-2"
+              onClick={() =>
+                (window.location.href =
+                  "mailto:anwarkhan.ai404@gmail.com?subject=Request Access to AI Response Quality Analyzer")
+              }
+            >
+              <Mail className="h-4 w-4" />
+              Request Access
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
