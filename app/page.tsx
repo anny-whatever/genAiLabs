@@ -103,7 +103,6 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Sparkles className="h-8 w-8 text-primary" />
                 <h1 className="text-4xl font-bold">
                   AI Response Quality Analyzer
                 </h1>
