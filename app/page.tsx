@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { PromptForm } from "@/components/prompt-form";
-import { ResultsDashboard } from "@/components/results-dashboard";
 import { ExportActions } from "@/components/export-actions";
-import { TestPromptsSelector } from "@/components/test-prompts-selector";
+import { TestPromptsModal } from "@/components/test-prompts-modal";
+import { ResultsModal } from "@/components/results-modal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PromptFormValues } from "@/lib/validation";
 import { ExperimentResult } from "@/types";
@@ -89,15 +89,19 @@ export default function Home() {
                 AI Response Quality Analyzer
               </h1>
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-6">
               Compare LLM responses with different parameters and analyze
               quality metrics
             </p>
+
+            {/* Modal Trigger Buttons */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <TestPromptsModal onSelectPrompt={handleTestPromptSelect} />
+              <ResultsModal results={results} />
+            </div>
           </div>
 
           <div className="space-y-6">
-            <TestPromptsSelector onSelectPrompt={handleTestPromptSelect} />
-
             <PromptForm
               onSubmit={handleSubmit}
               isLoading={isLoading}
@@ -113,8 +117,6 @@ export default function Home() {
             )}
 
             <ExportActions results={results} onLoad={setResults} />
-
-            {results.length > 0 && <ResultsDashboard results={results} />}
           </div>
         </div>
       </main>
