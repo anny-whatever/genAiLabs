@@ -76,16 +76,25 @@ export async function POST(request: NextRequest) {
       const useSeed = enableSeed ? seed : undefined;
 
       try {
-        const response = await generateResponse(
+        const startTime = Date.now();
+        const result = await generateResponse(
           prompt,
           temperature,
           top_p,
           frequency_penalty,
           presence_penalty,
           maxTokens,
-          useSeed
+          useSeed,
+          true, // enable logprobs
+          5 // top 5 logprobs
         );
-        const metrics = calculateMetrics(prompt, response);
+        const responseTime = Date.now() - startTime;
+
+        const metrics = calculateMetrics(
+          prompt,
+          result.content,
+          result.tokenLogprobs
+        );
 
         const params: any = {};
         if (temperature !== undefined) params.temperature = temperature;
@@ -101,9 +110,12 @@ export async function POST(request: NextRequest) {
           id: `${Date.now()}-${i}`,
           prompt,
           params,
-          response,
+          response: result.content,
           metrics,
           timestamp: Date.now(),
+          tokenLogprobs: result.tokenLogprobs,
+          finishReason: result.finishReason,
+          responseTime,
         });
       } catch (error) {
         console.error(`Error generating response ${i}:`, error);
