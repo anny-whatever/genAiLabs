@@ -5,9 +5,10 @@ import { PromptForm } from "@/components/prompt-form";
 import { ExportActions } from "@/components/export-actions";
 import { TestPromptsModal } from "@/components/test-prompts-modal";
 import { ResultsModal } from "@/components/results-modal";
+import { SavedRunsModal } from "@/components/saved-runs-modal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PromptFormValues } from "@/lib/validation";
-import { ExperimentResult } from "@/types";
+import { ExperimentResult, ExperimentRun } from "@/types";
 import { TestPrompt } from "@/lib/test-prompts";
 import { AlertCircle, Sparkles } from "lucide-react";
 
@@ -25,6 +26,17 @@ export default function Home() {
       ...testPrompt.recommendedParams,
     };
     setSelectedTestPrompt(formValues);
+  };
+
+  const handleLoadRun = (run: ExperimentRun) => {
+    setResults(run.results);
+    // Optionally, you could also populate the form with the prompt from the run
+    if (run.results.length > 0) {
+      const formValues: Partial<PromptFormValues> = {
+        prompt: run.results[0].prompt,
+      };
+      setSelectedTestPrompt(formValues);
+    }
   };
 
   const handleSubmit = async (values: PromptFormValues) => {
@@ -98,6 +110,7 @@ export default function Home() {
             <div className="flex items-center justify-center gap-4 mb-8">
               <TestPromptsModal onSelectPrompt={handleTestPromptSelect} />
               <ResultsModal results={results} />
+              <SavedRunsModal onLoadRun={handleLoadRun} />
             </div>
           </div>
 
@@ -116,7 +129,7 @@ export default function Home() {
               </Alert>
             )}
 
-            <ExportActions results={results} onLoad={setResults} />
+            <ExportActions results={results} />
           </div>
         </div>
       </main>

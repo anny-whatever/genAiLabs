@@ -22,6 +22,13 @@ export interface ExperimentResult {
   timestamp: number;
 }
 
+export interface ExperimentRun {
+  id: string;
+  name: string;
+  timestamp: number;
+  results: ExperimentResult[];
+}
+
 export interface GenerateRequest {
   prompt: string;
   temperatureRange: [number, number];

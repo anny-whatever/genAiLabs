@@ -29,15 +29,8 @@ export function PromptForm({
   isLoading = false,
   initialValues,
 }: PromptFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-    reset,
-  } = useForm<PromptFormValues>({
-    resolver: zodResolver(promptFormSchema),
+  const form = useForm<PromptFormValues>({
+    resolver: zodResolver(promptFormSchema) as any,
     defaultValues: {
       prompt: "",
       temperatureMin: 0.3,
@@ -59,6 +52,15 @@ export function PromptForm({
     },
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+    reset,
+  } = form;
+
   // Update form when initialValues change
   useEffect(() => {
     if (initialValues) {
@@ -70,6 +72,7 @@ export function PromptForm({
     }
   }, [initialValues, setValue]);
 
+  const prompt = watch("prompt");
   const temperatureMin = watch("temperatureMin");
   const temperatureMax = watch("temperatureMax");
   const topPMin = watch("topPMin");
@@ -85,6 +88,9 @@ export function PromptForm({
   const enableFrequencyPenalty = watch("enableFrequencyPenalty");
   const enablePresencePenalty = watch("enablePresencePenalty");
   const enableSeed = watch("enableSeed");
+
+  // Check if form is valid for submission
+  const isFormValid = prompt && prompt.trim().length >= 10;
 
   return (
     <Card>
@@ -366,7 +372,9 @@ export function PromptForm({
               placeholder="Leave empty for random"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!enableSeed}
-              {...register("seed", { valueAsNumber: true })}
+              {...register("seed", {
+                setValueAs: (v) => (v === "" ? undefined : parseInt(v, 10)),
+              })}
             />
             {errors.seed && (
               <p className="text-sm text-destructive">{errors.seed.message}</p>
@@ -416,7 +424,11 @@ export function PromptForm({
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading || !isFormValid}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
